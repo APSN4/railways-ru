@@ -64,8 +64,9 @@ for link in links:
     if accessibility is not None:
         spans_accessibility = accessibility.find_all('span')
         data['accessibility'].append(spans_accessibility[1].text)
-    if additional_services is not None:
+    if additional_info is not None:
         spans_additional_info = additional_info.find_all('span')
         data['additional_info'].append(spans_additional_info[1].text)
-    print(json.dumps(data))
-    sleep(2)
+
+with open("data.json", "w", encoding="utf-8") as outfile:
+    json.dump(data, outfile, ensure_ascii=False)
