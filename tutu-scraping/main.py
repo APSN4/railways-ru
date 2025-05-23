@@ -1,10 +1,12 @@
 import json
+import os
 from time import sleep
 
 import requests
 from bs4 import BeautifulSoup
+from dotenv import load_dotenv
 
-
+load_dotenv()
 r = requests.get('https://www.tutu.ru/poezda/vkz/')
 
 soup = BeautifulSoup(r.content, 'html.parser')
@@ -15,6 +17,29 @@ for item in items:
     links.append("https://www.tutu.ru" + item.get('href'))
 
 data = {"train_stations": []}
+
+
+def get_coords_from_yandex(address: str):
+    url = "https://geocode-maps.yandex.ru/v1/"
+    params = {
+        "apikey": os.getenv('YANDEX_API_KEY'),
+        "geocode": address,
+        "results": 1,
+        "format": "json",
+        "lang": "ru_RU"
+    }
+
+    try:
+        response = requests.get(url, params=params)
+        response.raise_for_status()
+        data = response.json()
+
+        pos_str = data["response"]["GeoObjectCollection"]["featureMember"][0]["GeoObject"]["Point"]["pos"]
+        lon, lat = map(float, pos_str.split())
+        return [lat, lon]  # в формате [широта, долгота]
+    except Exception as e:
+        print("Ошибка:", e)
+        return None
 
 for link in links:
 
@@ -28,7 +53,8 @@ for link in links:
         "additional_service": "",
         "accessibility": "",
         "additional_info": "",
-        "photo": ""
+        "photo": "",
+        "position": []
     }
 
     r = requests.get(link)
@@ -79,6 +105,7 @@ for link in links:
     if photo is not None:
         img_photo = photo.find_all('img')
         data_local['photo'] = img_photo[0].get('src')
+    data_local["position"] = get_coords_from_yandex(data_local["address"])
     data["train_stations"].append(data_local)
 
 with open("data.json", "w", encoding="utf-8") as outfile:
