@@ -19,6 +19,7 @@ data = {"train_stations": []}
 for link in links:
 
     data_local = {
+        "title": "",
         "address": "",
         "phone": "",
         "working_hours": "",
@@ -26,12 +27,14 @@ for link in links:
         "service": "",
         "additional_service": "",
         "accessibility": "",
-        "additional_info": ""
+        "additional_info": "",
+        "photo": ""
     }
 
     r = requests.get(link)
     soup = BeautifulSoup(r.content, 'html.parser')
 
+    title = soup.find('h1', attrs={'data-ti': 'header'})
     address = soup.find('div', attrs={'data-ti': 'about-address'})
     phones = soup.find('div', attrs={'data-ti': 'about-phone'})
     working_hours = soup.find('div', attrs={'data-ti': 'about-workingHours'})
@@ -40,7 +43,10 @@ for link in links:
     additional_services = soup.find('div', attrs={'data-ti': 'about-additionalServices'})
     accessibility = soup.find('div', attrs={'data-ti': 'about-accessibility'})
     additional_info = soup.find('div', attrs={'data-ti': 'about-additionalInfo'})
+    photo = soup.find('div', attrs={'data-ti': 'photo'})
 
+    if title is not None:
+        data_local["title"] = title.text
     if address is not None:
         spans_address = address.find_all('span')
         data_local["address"] = spans_address[1].text
@@ -70,6 +76,9 @@ for link in links:
     if additional_info is not None:
         spans_additional_info = additional_info.find_all('span')
         data_local['additional_info'] = spans_additional_info[1].text
+    if photo is not None:
+        img_photo = photo.find_all('img')
+        data_local['photo'] = img_photo[0].get('src')
     data["train_stations"].append(data_local)
 
 with open("data.json", "w", encoding="utf-8") as outfile:
