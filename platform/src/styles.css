@@ -1,0 +1,61 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #000; /* на всякий случай */
+    color: #fff;
+    overflow: hidden; /* Чтобы не было скролла */
+}
+
+/* Контейнер — растягиваем на весь экран */
+.app-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+}
+
+/* Карта на весь контейнер */
+#map {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+    box-shadow: none;
+    z-index: 0;
+}
+
+/* Плашка сверху — полупрозрачный стеклянный эффект */
+.glass-header {
+    position: absolute;
+    top: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 1200px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    padding: 1rem 2rem;
+    z-index: 10;
+}
+
+/* Заголовок и описание в плашке */
+.glass-header h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #555555; /* тёмно-серый для контраста */
+}
+
+.glass-header p {
+    margin-top: 0.25rem;
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.glass-footer {
+    display: none;
+}
