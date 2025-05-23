@@ -14,18 +14,21 @@ links = []
 for item in items:
     links.append("https://www.tutu.ru" + item.get('href'))
 
-data = {
-    "addresses": [],
-    "phones": [],
-    "working_hours": [],
-    "directions": [],
-    "services": [],
-    "additional_services": [],
-    "accessibility": [],
-    "additional_info": []
-}
+data = {"train_stations": []}
 
 for link in links:
+
+    data_local = {
+        "address": "",
+        "phone": "",
+        "working_hours": "",
+        "direction": "",
+        "service": "",
+        "additional_service": "",
+        "accessibility": "",
+        "additional_info": ""
+    }
+
     r = requests.get(link)
     soup = BeautifulSoup(r.content, 'html.parser')
 
@@ -40,33 +43,34 @@ for link in links:
 
     if address is not None:
         spans_address = address.find_all('span')
-        data["addresses"].append(spans_address[1].text)
+        data_local["address"] = spans_address[1].text
     if phones is not None:
         spans_phone = phones.find_all('span')
-        data["phones"].append(spans_phone[1].text)
+        data_local["phone"] = spans_phone[1].text
     if working_hours is not None:
         spans_working_hours = working_hours.find_all('span')
-        data["working_hours"].append(spans_working_hours[1].text)
+        data_local["working_hours"] = spans_working_hours[1].text
     if directions is not None:
         spans_directions = directions.find_all('span')
-        data["directions"].append(spans_directions[1].text)
+        data_local["direction"] = spans_directions[1].text
     if services is not None:
         services_list = []
         spans_services = services.find_all('span')
         for i, service in enumerate(spans_services):
             if i > 0:
                 services_list.append(service.text)
-        data['services'].append(', '.join(services_list))
+        data_local['service'] = ', '.join(services_list)
 
     if additional_services is not None:
         spans_additional_services = additional_services.find_all('span')
-        data['additional_services'].append(spans_additional_services[1].text)
+        data_local['additional_service'] = spans_additional_services[1].text
     if accessibility is not None:
         spans_accessibility = accessibility.find_all('span')
-        data['accessibility'].append(spans_accessibility[1].text)
+        data_local['accessibility'] = spans_accessibility[1].text
     if additional_info is not None:
         spans_additional_info = additional_info.find_all('span')
-        data['additional_info'].append(spans_additional_info[1].text)
+        data_local['additional_info'] = spans_additional_info[1].text
+    data["train_stations"].append(data_local)
 
 with open("data.json", "w", encoding="utf-8") as outfile:
     json.dump(data, outfile, ensure_ascii=False)
