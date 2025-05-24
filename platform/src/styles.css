@@ -124,7 +124,7 @@ html, body {
     bottom: 20px;
     right: 20px;
     width: 400px;
-    max-height: 70vh;
+    max-height: 50vh;
     overflow-y: auto;
     background: rgba(255, 255, 255, 0.15);
     border-radius: 16px;
@@ -158,5 +158,40 @@ html, body {
     font-size: 14px;
     color: #222;
 }
+
+.cities-wrapper {
+    margin-top: 16px;
+}
+
+.cities-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #222;
+    margin-bottom: 8px;
+}
+
+.cities-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.city-button {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(6px);
+    color: #000;
+    padding: 6px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.city-button:hover {
+    background: rgba(255, 255, 255, 0.35);
+    transform: scale(1.05);
+}
+
 
 
