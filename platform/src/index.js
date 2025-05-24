@@ -217,6 +217,9 @@ const moscowRailwayStations = {
 
 const map = L.map("map").setView([55.7558, 37.6173], 11);
 
+const searchInput = document.getElementById("station-search");
+const resultsList = document.getElementById("search-results");
+
 L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom: 19,
     attribution:
@@ -243,6 +246,8 @@ map.on("popupclose", (e) => {
 });
 
 let dataLinksObj = [];
+let stations = [];
+const markerRefs = [];
 
 fetch("storage/data_links.json")
     .then(res => res.json())
@@ -254,6 +259,7 @@ fetch("storage/data_links.json")
 fetch("storage/data.json")
     .then((response) => response.json())
     .then((data) => {
+        stations = data.train_stations
         data.train_stations.forEach((station, index) => {
             if (station.position == null) {
                 return
@@ -262,6 +268,54 @@ fetch("storage/data.json")
                 link: index
             }).addTo(map)
                 .bindPopup(createPopupHTML(station));
+            markerRefs[index] = marker;
         });
     })
     .catch((err) => console.error("Ошибка загрузки данных:", err));
+
+
+searchInput.addEventListener("input", () => {
+    const query = searchInput.value.toLowerCase().trim();
+    resultsList.innerHTML = "";
+
+    // Удаляем видимость при коротком запросе
+    if (query.length < 2 || stations.length === 0) {
+        resultsList.classList.remove("visible");
+        return;
+    }
+
+    const matches = stations
+        .filter(station => station.title && station.title.toLowerCase().includes(query))
+        .slice(0, 5);
+
+    console.log("🔍 Найдено совпадений:", matches.length);
+
+    if (matches.length === 0) {
+        resultsList.classList.remove("visible");
+        return;
+    }
+
+    matches.forEach(station => {
+        const li = document.createElement("li");
+        li.textContent = station.title;
+
+        li.addEventListener("click", () => {
+            if (station.position) {
+                map.setView([station.position[0], station.position[1]], 13);
+
+                const index = stations.findIndex(s => s.title === station.title);
+                const marker = markerRefs[index];
+                if (marker) marker.openPopup();
+            }
+
+            searchInput.value = "";
+            resultsList.innerHTML = "";
+            resultsList.classList.remove("visible");
+
+        });
+
+        resultsList.appendChild(li);
+    });
+
+    resultsList.classList.add("visible");
+});

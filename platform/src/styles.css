@@ -193,5 +193,99 @@ html, body {
     transform: scale(1.05);
 }
 
+/* Обёртка внутри header */
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
 
+/* Блок с заголовком */
+.header-text {
+    flex: 1 1 400px;
+}
+
+/* Поисковый блок справа */
+.search-container {
+    position: relative;
+    width: 300px;
+    flex-shrink: 0;
+    margin-right: 2rem;
+}
+
+/* Поле ввода */
+#station-search {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: #222;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) inset;
+    transition: all 0.3s ease;
+}
+
+#station-search::placeholder {
+    color: #666;
+}
+
+#station-search:focus {
+    outline: none;
+    background: rgba(255, 255, 255, 0.35);
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Выпадающий список результатов */
+.search-results {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    left: 0;
+    right: 0;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    list-style: none;
+    padding: 0;
+    margin: 0 0 0 1rem;
+    max-height: 240px;
+    overflow-y: auto;
+    z-index: 1000;
+
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Активный класс для показа */
+.search-results.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+/* Элемент списка */
+.search-results li {
+    padding: 0.65rem 1rem;
+    font-size: 0.95rem;
+    color: #222;
+    background: rgba(255, 255, 255, 0.85);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.search-results li:hover {
+    background: rgba(230, 230, 230, 0.72);
+}
 

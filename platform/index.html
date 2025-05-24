@@ -10,9 +10,23 @@
 <body>
 <div class="app-container">
     <header class="glass-header">
-        <h1>Вокзалы Москвы</h1>
-        <p>Интерактивная карта с информацией о вокзалах, маршрутах и направлениях</p>
+        <div class="header-content">
+            <div class="header-text">
+                <h1>Вокзалы Москвы</h1>
+                <p>Интерактивная карта с информацией о вокзалах, маршрутах и направлениях</p>
+            </div>
+            <div class="search-container">
+                <input
+                        type="text"
+                        id="station-search"
+                        placeholder="🔍 Куда отправляемся?"
+                        autocomplete="off"
+                />
+                <ul id="search-results" class="search-results"></ul>
+            </div>
+        </div>
     </header>
+
 
     <div id="map"></div>
 </div>
