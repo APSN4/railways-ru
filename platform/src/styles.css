@@ -119,3 +119,44 @@ html, body {
     margin-right: 0.3rem;
 }
 
+.timetable-panel {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: 400px;
+    max-height: 70vh;
+    overflow-y: auto;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    padding: 16px;
+    z-index: 1000;
+    color: #222;
+
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.timetable-panel.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.timetable-panel table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.timetable-panel th,
+.timetable-panel td {
+    padding: 6px 8px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    font-size: 14px;
+    color: #222;
+}
+
+

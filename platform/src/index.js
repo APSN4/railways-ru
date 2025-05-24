@@ -27,6 +27,61 @@ function createPopupHTML(station) {
     return html;
 }
 
+async function loadTimetablePanel(url) {
+    try {
+        const res = await fetch(`http://localhost:3001/api/timetable?url=${encodeURIComponent(url)}`);
+        const data = await res.json();
+
+        // Удалим старую панель, если есть
+        const oldPanel = document.querySelector(".timetable-panel");
+        if (oldPanel) {
+            oldPanel.remove();
+        }
+
+        const container = document.createElement("div");
+        container.className = "glass-panel timetable-panel";
+
+        const table = document.createElement("table");
+        table.innerHTML = `<thead><tr><th>Время</th><th>Номер</th><th>Маршрут</th><th>Статус</th></tr></thead>`;
+        const tbody = document.createElement("tbody");
+
+        data.rows.forEach(row => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td>${row.time}</td>
+                <td>${row.number}</td>
+                <td>${row.direction}</td>
+                <td>${row.status}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+
+        table.appendChild(tbody);
+        container.appendChild(table);
+        document.querySelector(".app-container").appendChild(container);
+
+        container.offsetHeight;
+        container.classList.add("visible");
+
+        requestAnimationFrame(() => {
+            container.classList.add("visible");
+        });
+
+    } catch (err) {
+        console.error("Ошибка загрузки табло:", err);
+    }
+}
+
+function closeTimetablePanel() {
+    const panel = document.querySelector(".timetable-panel");
+    if (!panel) return;
+
+    panel.classList.remove("visible");
+    setTimeout(() => {
+        panel.remove();
+    }, 300);
+}
+
 
 const map = L.map("map").setView([55.7558, 37.6173], 11);
 
@@ -43,6 +98,11 @@ map.on("popupopen", (e) => {
             line.classList.toggle("expanded");
         });
     });
+    loadTimetablePanel("https://www.tutu.ru/poezda/Abakan/");
+});
+
+map.on("popupclose", (e) => {
+    closeTimetablePanel();
 });
 
 
